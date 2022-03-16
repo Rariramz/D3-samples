@@ -1,10 +1,14 @@
 Promise.all([
-  fetch(
-    "https://datausa.io/api/data?drilldowns=Nation&measures=Population"
-  ).then((res) => res.json()),
-  fetch(
-    "https://datausa.io/api/data?drilldowns=State&measures=Population"
-  ).then((res) => res.json()),
+  fetch("https://datausa.io/api/data?drilldowns=Nation&measures=Population")
+    .then((res) => res.json())
+    .catch((err) => {
+      throw err;
+    }),
+  fetch("https://datausa.io/api/data?drilldowns=State&measures=Population")
+    .then((res) => res.json())
+    .catch((err) => {
+      throw err;
+    }),
 ])
   .then(([obj_0, obj_1]) => {
     visualize("usa", obj_0.data, "USA Population");
@@ -12,13 +16,7 @@ Promise.all([
       visualize(state.key, state.values, `${state.values[0].State} Population`);
     }
 
-    function visualize(
-      elementId,
-      data,
-      title,
-      parentSelector = "body",
-      width = "260px"
-    ) {
+    function visualize(elementId, data, title, parentSelector = "body") {
       d3.select(parentSelector)
         .append("figure")
         .attr("id", elementId)
@@ -41,13 +39,18 @@ Promise.all([
         .append("span");
 
       // UPDATE
+      let scale = d3.scale
+        .linear()
+        .domain([0, getMaxYearsPopulation(data)])
+        .range([0, 250]);
+
       d3.select(`#${elementId}`)
         .select("div.diagram")
         .selectAll("div.item")
         .data(data)
         .selectAll("div.data")
         .style("width", (d) => {
-          return scale([0, d.Population], [0, width]) + "px";
+          return scale(d.Population) + "px";
         })
         .select("span")
         .text((d) => d.Population.toLocaleString());
@@ -67,10 +70,14 @@ Promise.all([
         .data(data)
         .exit()
         .remove();
-    }
 
-    function scale(domain, range) {
-      return d3.scale.linear().domain(domain).range(range);
+      function getMaxYearsPopulation(years) {
+        let populations = [];
+        for (let year of years) {
+          populations.push(year.Population);
+        }
+        return d3.max(populations);
+      }
     }
 
     function groupByKey(data, key) {
@@ -84,6 +91,6 @@ Promise.all([
     }
   })
   .catch((err) => {
-    console.log(err);
-    d3.select("body").append("h1").attr("title").data(err).text(err);
+    d3.select("body").append("h1").attr("class", "title").text("ERROR :(");
+    d3.select("body").append("h2").attr("class", "title").text(err);
   });
