@@ -1,3 +1,11 @@
+* {
+  box-sizing: border-box;
+}
+
+div {
+  width: 100%;
+}
+
 .container {
   width: 90vw;
   margin: 0 auto;
@@ -26,6 +34,9 @@ figure {
   margin-bottom: 10px;
   text-align: center;
   letter-spacing: 0.05em;
+}
+.big {
+  font-size: 2em;
 }
 
 .diagram {
@@ -67,4 +78,23 @@ figure {
   font-size: 1em;
   color: #302ab1;
   font-weight: 500;
+}
+
+.unselected {
+  display: none;
+}
+
+select {
+  display: block;
+  margin: 20px auto;
+  font-family: "Poppins";
+  background-color: #ccd1e4c9;
+  border: 0.3em solid #ccd1e4;
+  padding: 10px;
+  border-radius: 5px;
+  outline: none;
+}
+
+select option {
+  background-color: #ccd1e4c9;
 }
