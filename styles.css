@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  font-size: 18px;
 }
 
 div {
@@ -93,6 +94,7 @@ select {
   padding: 10px;
   border-radius: 5px;
   outline: none;
+  font-size: 1em;
 }
 
 select option {
