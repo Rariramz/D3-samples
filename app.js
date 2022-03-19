@@ -11,20 +11,28 @@ Promise.all([
     }),
 ])
   .then(([wholePopulation, statesPopulation]) => {
-    visualize(wholePopulation);
-    const groupedData = groupByKey(statesPopulation.data, "Slug State");
-    addSelect(["usa"].concat(groupedData));
-    visualize(groupedData);
+    const wholePopulationGrouped = groupByKey(
+      wholePopulation.data,
+      "Slug Nation"
+    );
+    const statesPopulationGrouped = groupByKey(
+      statesPopulation.data,
+      "Slug State"
+    );
+    visualize(wholePopulationGrouped);
+    visualize(statesPopulationGrouped);
+    const options = wholePopulationGrouped.concat(statesPopulationGrouped);
+    addSelect(options);
+    selectHandler();
 
     function selectHandler() {
       d3.select("body").selectAll("figure").classed("unselected", false);
       let filterState = document.getElementById("select").value;
       d3.select("body")
         .selectAll("figure")
-        .data([wholePopulation].concat(groupedData))
+        .data(options)
         .filter((d) => {
-          if (filterState && filterState !== "All")
-            return !(d.key == filterState);
+          if (filterState) return !(d.key == filterState);
           else return false;
         })
         .classed("unselected", true);
@@ -50,16 +58,12 @@ Promise.all([
       d3.select("select")
         .selectAll("option")
         .data(options)
-        .text((opt) => opt.key || "All");
+        .text((opt) => opt.key);
     }
 
-    function visualize(data, filterState = null, parent = "body") {
-      if (Array.isArray(data)) {
-        for (let state of data) {
-          visualizeOne(state.key, state.values, parent);
-        }
-      } else {
-        visualizeOne("usa", data.data, parent);
+    function visualize(data, parent = "body") {
+      for (let state of data) {
+        visualizeOne(state.key, state.values, parent);
       }
 
       function visualizeOne(key, values, parent) {

@@ -87,11 +87,12 @@ figure {
 
 select {
   display: block;
-  margin: 20px auto;
+  width: 340px;
+  margin: 20px auto 0px auto;
   font-family: "Poppins";
   background-color: #ccd1e4c9;
   border: 0.3em solid #ccd1e4;
-  padding: 10px;
+  padding: 5px;
   border-radius: 5px;
   outline: none;
   font-size: 1em;
