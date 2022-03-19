@@ -3,18 +3,14 @@
   font-size: 18px;
 }
 
-div {
-  width: 100%;
-}
-
 .container {
   width: 90vw;
   margin: 0 auto;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-start;
+  justify-content: CENTER;
 }
 
 figure {
@@ -71,8 +67,8 @@ figure {
   padding: 0.2em;
   border-radius: 0 3px 3px 0;
   color: #fff;
-  letter-spacing: 0.2em;
 }
+
 .year {
   display: inline;
   margin-left: 5px;
@@ -88,7 +84,7 @@ figure {
 select {
   display: block;
   width: 340px;
-  margin: 20px auto 0px auto;
+  margin: 20px;
   font-family: "Poppins";
   background-color: #ccd1e4c9;
   border: 0.3em solid #ccd1e4;

@@ -85,25 +85,27 @@ Promise.all([
           .append("span");
 
         // UPDATE
-        function getMaxYearsPopulation(years) {
+        function getMaximumYearsPopulations(years) {
           let populations = [];
           for (let year of years) {
             populations.push(year.Population);
           }
-          //console.log(d3.max(populations));
-          return d3.max(populations);
+          return [d3.min(populations), d3.max(populations)];
         }
         let scale = d3.scale
           .linear()
-          .domain([0, getMaxYearsPopulation(values)])
-          .range([0, 250]);
+          .domain([
+            getMaximumYearsPopulations(values)[0],
+            getMaximumYearsPopulations(values)[1],
+          ])
+          .rangeRound([130, 230]);
 
         d3.select(`#${keyFormatted}`)
           .select("div.diagram")
           .selectAll("div.item")
           .data(values)
           .select("div.data")
-          .style("width", (d) => {
+          .style("min-width", (d) => {
             return scale(d.Population) + "px";
           })
           .select("span")
