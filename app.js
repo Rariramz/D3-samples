@@ -11,14 +11,8 @@ Promise.all([
     }),
 ])
   .then(([wholePopulation, statesPopulation]) => {
-    const wholePopulationGrouped = groupByKey(
-      wholePopulation.data,
-      "Slug Nation"
-    );
-    const statesPopulationGrouped = groupByKey(
-      statesPopulation.data,
-      "Slug State"
-    );
+    const wholePopulationGrouped = groupByKey(wholePopulation.data, "Nation");
+    const statesPopulationGrouped = groupByKey(statesPopulation.data, "State");
     visualize(wholePopulationGrouped);
     visualize(statesPopulationGrouped);
     const options = wholePopulationGrouped.concat(statesPopulationGrouped);
@@ -67,17 +61,19 @@ Promise.all([
       }
 
       function visualizeOne(key, values, parent) {
+        keyFormatted = key.toLowerCase().replace(/\s/g, "-");
+
         // ENTER
         d3.select(parent)
           .append("figure")
-          .attr("id", key)
+          .attr("id", keyFormatted)
           .append("figcapture")
           .attr("class", "title")
-          .text(`${key.toUpperCase()} Population`);
+          .text(`${key} Population`);
 
-        d3.select(`#${key}`).append("div").attr("class", "diagram");
+        d3.select(`#${keyFormatted}`).append("div").attr("class", "diagram");
 
-        d3.select(`#${key}`)
+        d3.select(`#${keyFormatted}`)
           .select("div.diagram")
           .selectAll("div.item")
           .data(values)
@@ -102,7 +98,7 @@ Promise.all([
           .domain([0, getMaxYearsPopulation(values)])
           .range([0, 250]);
 
-        d3.select(`#${key}`)
+        d3.select(`#${keyFormatted}`)
           .select("div.diagram")
           .selectAll("div.item")
           .data(values)
@@ -115,7 +111,7 @@ Promise.all([
             return d.Population.toLocaleString();
           });
 
-        d3.select(`#${key}`)
+        d3.select(`#${keyFormatted}`)
           .select("div.diagram")
           .selectAll("div.item")
           .data(values)
