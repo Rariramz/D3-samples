@@ -13,6 +13,54 @@
   justify-content: CENTER;
 }
 
+section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-block: 20px;
+}
+
+h1 {
+  color: rgb(53, 52, 52);
+}
+
+.buttons {
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+button,
+select {
+  transition: all 0.2s ease-out;
+  background-color: rgb(53, 52, 52);
+  border: none;
+  outline: none;
+  color: #fff;
+  padding: 5px 20px;
+  border-radius: 5px;
+  font-family: "Poppins";
+  font-size: 1em;
+  margin: 5px;
+}
+button:hover,
+select:hover {
+  transition: all 0.2s ease-out;
+  background-color: rgba(53, 52, 52, 0.815);
+}
+button:active,
+select:active {
+  transition: all 0.1s ease-out;
+  background-color: #ccd1e4;
+  color: rgb(53, 52, 52);
+}
+select option {
+  background-color: rgb(53, 52, 52);
+}
+
 figure {
   display: inline-block;
   border: 0.3em solid #ccd1e4;
@@ -84,33 +132,15 @@ figure {
   display: none;
 }
 
-select {
-  display: block;
-  width: 340px;
-  margin: 20px;
-  font-family: "Poppins";
-  background-color: #ccd1e4c9;
-  border: 0.3em solid #ccd1e4;
-  padding: 5px;
-  border-radius: 5px;
-  outline: none;
-  font-size: 1em;
-}
-
-select option {
-  background-color: #ccd1e4c9;
-}
-
 .axis path,
 .axis line {
   fill: none;
-  stroke: steelblue;
+  stroke: rgba(53, 52, 52, 0.815);
 }
 .axis .grid-line {
   stroke: #ccd1e4;
   shape-rendering: crispedges;
-  stroke-opacity: 0.2;
 }
 .axis text {
-  font: 10px Poppins;
+  font: 0.8em Poppins;
 }

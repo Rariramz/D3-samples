@@ -56,10 +56,11 @@ Promise.all([
 
       const height = 1000;
       const width = 1200;
-      const marginTop = 50;
-      const marginBottom = 120;
-      const marginInline = 100;
+      const marginBlock = 50;
+      const marginLeft = 150;
+      const marginRight = 50;
       let color = d3.scale.category10();
+      const multiplier = 1000000;
 
       d3.select(parent)
         .append("figure")
@@ -79,8 +80,8 @@ Promise.all([
         .attr("height", height);
 
       // добавляем к оси отступы слева и справа
-      let xAxisLength = width - 2 * marginInline;
-      let yAxisLength = height - (marginTop + marginBottom);
+      let xAxisLength = width - (marginLeft + marginRight);
+      let yAxisLength = height - 2 * marginBlock;
 
       function getExtentYearsPopulations(states) {
         let populations = [];
@@ -90,71 +91,76 @@ Promise.all([
         return d3.extent(populations);
       }
       let scaleX = d3.scale
+        .linear()
+        .domain([0, getExtentYearsPopulations(values)[1] / multiplier])
+        .range([0, xAxisLength]);
+      let scaleY = d3.scale
         .ordinal()
-        .rangeRoundBands([0, xAxisLength + marginInline], 0.1)
+        .rangeRoundBands([yAxisLength, 0], 0.1)
         .domain(
           values.map((d) => {
             return d.State;
           })
         );
-      let scaleY = d3.scale
-        .linear()
-        .domain([
-          getExtentYearsPopulations(values)[0],
-          getExtentYearsPopulations(values)[1],
-        ])
-        .range([yAxisLength, 0]);
 
-      let xAxis = d3.svg.axis().scale(scaleX).orient("bottom");
+      let xAxis = d3.svg.axis().scale(scaleX).orient("bottom").ticks(30);
       let yAxis = d3.svg.axis().scale(scaleY).orient("left");
 
       svg
         .append("g")
         .attr("class", "x-axis")
-        .attr(
-          "transform",
-          `translate(${marginInline}, ${height - marginBottom})`
-        )
-        .call(xAxis)
-        .selectAll("text")
-        .attr("y", 0)
-        .attr("x", -5)
-        .style("text-anchor", "end")
-        .attr("transform", "rotate(-90)");
+        .attr("transform", `translate(${marginLeft}, ${height - marginBlock})`)
+        .call(xAxis);
+      svg
+        .select(".x-axis")
+        .append("text")
+        .attr("x", xAxisLength + 10)
+        .attr("y", 10)
+        .attr("text-anchor", "start")
+        .style("font-size", "1em")
+        .text("mil");
       svg
         .append("g")
         .attr("class", "y-axis")
-        .attr("transform", `translate(${marginInline}, ${marginTop})`)
+        .attr("transform", `translate(${marginLeft}, ${marginBlock})`)
         .call(yAxis);
+      svg
+        .select(".y-axis")
+        .append("text")
+        .attr("x", 0)
+        .attr("y", -10)
+        .attr("text-anchor", "end")
+        .style("font-size", "1em")
+        .text("States");
 
       d3.select(parent)
-        .selectAll("g.y-axis g.tick")
+        .selectAll("g.x-axis g.tick")
         .append("line")
         .classed("grid-line", true)
         .attr("x1", 0)
         .attr("y1", 0)
-        .attr("x2", xAxisLength)
-        .attr("y2", 0);
+        .attr("x2", 0)
+        .attr("y2", -yAxisLength);
 
       /* создаем объект g с набором столбиков */
       svg
         .append("g")
-        .attr("transform", `translate(${marginInline}, 0)`)
+        .attr("transform", `translate(${marginLeft}, ${marginBlock})`)
         .selectAll(".bar")
         .data(values)
         .enter()
         .append("rect")
         .attr("class", "bar")
         .attr("x", (d) => {
-          return scaleX(d.State);
+          return 0;
         })
-        .attr("width", scaleX.rangeBand())
+        .attr("width", (d) => {
+          return scaleX(d.Population / multiplier);
+        })
         .attr("y", (d) => {
-          return scaleY(d.Population);
+          return scaleY(d.State);
         })
-        .attr("height", (d) => {
-          return height - scaleY(d.Population) - marginBottom;
-        })
+        .attr("height", scaleY.rangeBand())
         .attr("fill", (d) => {
           return color(d.State);
         });
