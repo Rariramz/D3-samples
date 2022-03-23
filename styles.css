@@ -41,7 +41,6 @@ figure {
   padding: 10px;
   margin: 5px;
   border-radius: 20px;
-  width: 300px;
 }
 
 .item {
@@ -53,6 +52,10 @@ figure {
   margin-bottom: 3px;
   font-size: 0.5em;
   font-family: "Poppins";
+}
+
+.item:last-child {
+  margin-bottom: 0px;
 }
 
 .data {
@@ -96,4 +99,18 @@ select {
 
 select option {
   background-color: #ccd1e4c9;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: steelblue;
+}
+.axis .grid-line {
+  stroke: #ccd1e4;
+  shape-rendering: crispedges;
+  stroke-opacity: 0.2;
+}
+.axis text {
+  font: 10px Poppins;
 }
